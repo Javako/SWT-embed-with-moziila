@@ -1,0 +1,55 @@
+    package com.fenbeisoft.first;  
+    import org.eclipse.swt.SWT;  
+    import org.eclipse.swt.browser.ProgressEvent;  
+    import org.eclipse.swt.browser.ProgressListener;  
+    import org.eclipse.swt.widgets.Display;  
+    import org.eclipse.swt.widgets.Shell;  
+    import org.mozilla.interfaces.*;  
+    import org.eclipse.swt.browser.Browser;  
+    import org.eclipse.swt.SWTError;  
+    public class Forth {  
+      static{
+    		System.setProperty("org.eclipse.swt.browser.XULRunnerPath", "C:\\xulrunner");
+    	}
+            public static void main(String args[]) {  
+                     
+                    final Browser browser;  
+                    Display display = new Display();  
+                    Shell shell = new Shell(display);  
+                    shell.setSize(800, 600);  
+                    shell.open();  
+                    shell.setText("FenbeiFoft");
+                     
+                    //Initiating the browser using SWT  
+                    try {  
+                                    browser = new Browser(shell, SWT.MOZILLA);  
+                            } catch (SWTError e) {  
+                                    System.out.println("Couldn't intiate the browser: " + e.getMessage());  
+                                    return;  
+                            }  
+                     
+                    
+                     
+                    // Adapt browser size to shell size  
+                    browser.setBounds(shell.getClientArea());  
+                    // Load an URL into the web browser  
+                    browser.setUrl("http://www.baidu.com");  
+                     
+                    // Listens for page loading status.  
+                    browser.addProgressListener(new ProgressListener() {  
+                            public void changed(ProgressEvent event) {  
+                            }  
+                            public void completed(ProgressEvent event) {  
+                                    nsIWebBrowser webBrowser = (nsIWebBrowser)browser.getWebBrowser();  
+                                    nsIDOMWindow window = webBrowser.getContentDOMWindow();  
+                                    nsIDOMDocument document = window.getDocument();  
+                                    System.out.println(document);  
+                            }  
+                    });  
+                    while (!shell.isDisposed()) {  
+                            if (!display.readAndDispatch()) {  
+                                    display.sleep();  
+                            }  
+                    }  
+            }  
+    }  
